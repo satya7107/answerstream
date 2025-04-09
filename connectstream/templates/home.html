@@ -1,23 +1,32 @@
-<!-- home.html -->
 {% extends 'base.html' %}
 {% load static %}
+{% load dict_extras %}
+
 {% block title %}Home - Answer Stream{% endblock %}
+
 {% block content %}
 <h2>Questions</h2>
+
 {% for question in questions %}
 <div class="card mb-3">
     <div class="card-body">
         <h5 class="card-title">{{ question.title }}</h5>
         <p class="card-text">{{ question.description }}</p>
         <p class="text-muted">Asked by {{ question.created_by.username }} on {{ question.created_at }}</p>
+
+        <!-- Answer Button -->
         <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#answerModal-{{ question.id }}">
             <i class="fa fa-reply"></i> Answer
         </button>
+
+        <!-- Edit Button (only for question author) -->
         {% if user == question.created_by %}
         <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#editQuestionModal-{{ question.id }}">
             <i class="fa fa-pencil"></i> Edit
         </button>
         {% endif %}
+
+        <!-- Answers List -->
         <div class="mt-3">
             <h6>Answers:</h6>
             {% for answer in question.answers.all %}
@@ -25,6 +34,7 @@
                 <div class="card-body">
                     <p>{{ answer.content }}</p>
                     <small class="text-muted">Answered by {{ answer.answered_by.username }}</small>
+
                     <form method="POST" action="{% url 'like_answer' answer.id %}" class="like-form" data-answer-id="{{ answer.id }}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-sm btn-outline-success">
@@ -40,14 +50,22 @@
         </div>
     </div>
 </div>
-{% include 'modals/answer_modal.html' with question=question form=question.form %}
+
+<!-- Modals -->
+{% include 'modals/answer_modal.html' with question=question form=answer_forms|dict_get:question.id %}
 {% include 'modals/edit_question_modal.html' with question=question %}
 {% endfor %}
+
+<!-- Ask Question Button -->
 <button class="btn btn-primary" data-toggle="modal" data-target="#askQuestionModal">
     <i class="fa fa-question"></i> Ask a Question
 </button>
+
+<!-- General Modals -->
 {% include 'modals/ask_question_modal.html' %}
 {% include 'modals/login_modal.html' %}
+
+<!-- Like AJAX Script -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     const likeForms = document.querySelectorAll(".like-form");

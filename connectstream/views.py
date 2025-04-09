@@ -9,7 +9,7 @@ from .forms import RegisterForm
 def home(request):
     questions = Question.objects.all().order_by('-created_at')
     question_form = QuestionForm()
-    answer_forms = {q.id: AnswerForm() for q in questions}
+    answer_forms = {question.id: AnswerForm() for question in questions}
     login_form = AuthenticationForm()
     
     return render(request, 'home.html', {
