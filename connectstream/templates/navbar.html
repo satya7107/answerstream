@@ -7,22 +7,22 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-user"></i> {{ user.username }}</a>
-                </li>
-                <li class="nav-item">
-                    <form method="post" action="{% url 'logout' %}" style="display: inline;">
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="fa fa-user"></i> {{ user.username }}</a>
+            </li>
+            <li class="nav-item">
+                <form method="post" action="{% url 'logout' %}" style="display: inline;">
                     {% csrf_token %}
-                        <button type="submit" class="btn btn-link nav-link" style="display: inline; border: none; background: none; padding: 0; cursor: pointer;">Logout</button>
-                    </form>
-                </li>
+                    <button type="submit" class="btn btn-link nav-link" style="display: inline; border: none; background: none; padding: 0; cursor: pointer;">Logout</button>
+                </form>
+            </li>
             {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}" data-toggle="modal" data-target="#loginModal"><i class="fa fa-sign-in"></i> Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register' %}"><i class="fa fa-user-plus"></i> Register</a>
-                </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}" data-toggle="modal" data-target="#loginModal"><i class="fa fa-sign-in"></i> Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'register' %}"><i class="fa fa-user-plus"></i> Register</a>
+            </li>
             {% endif %}
         </ul>
     </div>
